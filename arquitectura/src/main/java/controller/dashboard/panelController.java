@@ -17,6 +17,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import domain.adm.Company;
 import domain.adm.Region;
 import domain.session.session;
+import service.login.SimpleUserManager;
 //import service.gestion.PlanService;
 
 @Controller
@@ -33,8 +34,8 @@ public class panelController {
 	@Autowired
 	private service.adm.CurrencyService currencyService;
 
-	//@Autowired
-	//private PlanService planService;
+	@Autowired
+	private SimpleUserManager userService;
 	
 	private enum Filtro {
 	    cliente, tipo_cliente, bodega, area_cliente;
@@ -59,4 +60,13 @@ public class panelController {
 		}
 	}
 	
+	@RequestMapping(value = "/listar", method = RequestMethod.GET)
+	public String listar(Model model) {
+		if (model.containsAttribute("user_inicio") == true) {
+			model.addAttribute("usuarios",userService.getUsers());
+			return "listar";
+		} else {
+			return "redirect:/index/ingreso";
+		}
+	}
 }
